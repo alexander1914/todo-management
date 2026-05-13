@@ -38,7 +38,7 @@ public class TodoServiceImpl implements TodoService {
     public TodoDto getTodo(Long id) {
 
         Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("TODO not found with id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("TODO not found with id: " + id));
 
         return modelMapper.map(todo, TodoDto.class);
     }
@@ -49,5 +49,54 @@ public class TodoServiceImpl implements TodoService {
 
         return todos.stream().map((todo) -> modelMapper.map(todo, TodoDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public TodoDto updateTodo(TodoDto todoDto, Long id) {
+
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Todo not found with id: " + id));
+        todo.setTitle(todoDto.getTitle());
+        todo.setDescription(todoDto.getDescription());
+        todo.setCompleted(todoDto.isCompleted());
+
+        Todo updatedTodo = todoRepository.save(todo);
+
+        return modelMapper.map(updatedTodo, TodoDto.class);
+    }
+
+    @Override
+    public void deleteTodo(Long id) {
+
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Todo not found with id: " + id));
+
+        todoRepository.deleteById(todo.getId());
+    }
+
+    @Override
+    public TodoDto completedTodo(Long id) {
+
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Todo not found with id: " + id));
+
+        todo.setCompleted(Boolean.TRUE);
+
+        Todo updatedTodo = todoRepository.save(todo);
+
+        return modelMapper.map(updatedTodo, TodoDto.class);
+    }
+
+    @Override
+    public TodoDto inCompletedTodo(Long id) {
+
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Todo not found with id: " + id));
+
+        todo.setCompleted(Boolean.FALSE);
+
+        Todo updatedTodo = todoRepository.save(todo);
+
+        return modelMapper.map(updatedTodo, TodoDto.class);
     }
 }

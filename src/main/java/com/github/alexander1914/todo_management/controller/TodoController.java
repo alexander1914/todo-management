@@ -5,6 +5,7 @@ import com.github.alexander1914.todo_management.service.TodoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class TodoController {
     private final TodoService todoService;
 
     // Build Add ToDo REST API
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<TodoDto> addTodo(@RequestBody TodoDto todoDto) {
 
@@ -26,6 +28,7 @@ public class TodoController {
     }
 
     //Build GET ToDo REST API
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("{id}")
     public ResponseEntity<TodoDto> getTodo(@PathVariable("id") Long todoId) {
 
@@ -35,6 +38,7 @@ public class TodoController {
     }
 
     //Build GET All ToDo REST API
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping
     public ResponseEntity<List<TodoDto>> getAllTodos() {
 
@@ -44,6 +48,7 @@ public class TodoController {
     }
 
     //Build Update ToDo REST API
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("{id}")
     public ResponseEntity<TodoDto> updateTodo(@RequestBody TodoDto todoDto, @PathVariable("id") Long todoId) {
 
@@ -53,6 +58,7 @@ public class TodoController {
     }
 
     //Build Delete ToDo REST API
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteTodo(@PathVariable("id") Long todoId) {
 
@@ -62,6 +68,7 @@ public class TodoController {
     }
 
     //Build Completed ToDo REST API
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PatchMapping("{id}/completed")
     public ResponseEntity<TodoDto> completedTodo(@PathVariable("id") Long todoId) {
 
@@ -71,6 +78,7 @@ public class TodoController {
     }
 
     //Build Incompleted ToDo REST API
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PatchMapping("{id}/incompleted")
     public ResponseEntity<TodoDto> inCompletedTodo(@PathVariable("id") Long todoId) {
 

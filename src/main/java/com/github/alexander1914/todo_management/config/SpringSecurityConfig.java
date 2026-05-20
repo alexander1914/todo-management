@@ -46,6 +46,7 @@ public class SpringSecurityConfig {
         return http.build();
     }
 
+    /*
     @Bean
     public UserDetailsService userDetailsService() {
 
@@ -55,7 +56,7 @@ public class SpringSecurityConfig {
 
         return new InMemoryUserDetailsManager(todo, admin);
     }
-
+    */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) {
         return configuration.getAuthenticationManager();

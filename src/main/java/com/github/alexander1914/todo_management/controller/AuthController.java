@@ -1,5 +1,6 @@
 package com.github.alexander1914.todo_management.controller;
 
+import com.github.alexander1914.todo_management.dto.JwtAuthResponseDto;
 import com.github.alexander1914.todo_management.dto.LoginDto;
 import com.github.alexander1914.todo_management.dto.RegisterDto;
 import com.github.alexander1914.todo_management.service.AuthService;
@@ -28,9 +29,12 @@ public class AuthController {
 
     //Build Login REST API
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginDto loginDto) {
-        String response = authService.login(loginDto);
+    public ResponseEntity<JwtAuthResponseDto> loginUser(@RequestBody LoginDto loginDto) {
+        String token = authService.login(loginDto);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        JwtAuthResponseDto jwtAuthResponseDto = new JwtAuthResponseDto();
+        jwtAuthResponseDto.setAccessToken(token);
+
+        return new ResponseEntity<>(jwtAuthResponseDto, HttpStatus.OK);
     }
 }
